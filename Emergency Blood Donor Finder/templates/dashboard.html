@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | Emergency Blood Finder{% endblock %}
+{% block content %}
+<section class="page-wrap">
+	<p class="eyebrow">Your response center</p>
+	<h1>Hello, {{ user['name'].split()[0] }}.</h1>
+	<p class="muted">Keep your details current so local support can reach you.</p>
+	<div class="stats-grid user-stats">
+		<div class="panel stat"><span>Available donors</span><strong>♡ {{ stats.available_donors }}</strong></div>
+		<div class="panel stat"><span>All blood requests</span><strong>▤ {{ stats.requests }}</strong></div>
+		<div class="panel stat"><span>Critical requests</span><strong>! {{ stats.critical }}</strong></div>
+		<div class="panel stat"><span>Urgent requests</span><strong>↗ {{ stats.urgent }}</strong></div>
+		<div class="panel stat"><span>Completed requests</span><strong>✓ {{ stats.completed }}</strong></div>
+	</div>
+	<div class="dashboard-grid">
+		<a class="panel action-card" href="{{ url_for('profile') }}"><span class="action-icon">◎</span><h2>My Profile</h2><p>Update your donor information and availability.</p></a>
+		<a class="panel action-card" href="{{ url_for('find_donor') }}"><span class="action-icon">♡</span><h2>Available Donors</h2><p>Search by blood group, city, and availability.</p></a>
+		<a class="panel action-card" href="{{ url_for('my_requests') }}"><span class="action-icon">▤</span><h2>My Blood Requests</h2><p>{{ stats.my_requests }} total request(s).</p></a>
+		<a class="panel action-card" href="{{ url_for('my_requests') }}"><span class="action-icon">◷</span><h2>Pending Requests</h2><p>{{ stats.pending }} request(s) awaiting completion.</p></a>
+		<a class="panel action-card" href="{{ url_for('support_tickets') }}"><span class="action-icon">✉</span><h2>Support Center</h2><p>Submit or track admin conversations.</p></a>
+		<a class="panel action-card" href="{{ url_for('notifications') }}"><span class="action-icon">◌</span><h2>Notifications</h2><p>{{ stats.unread }} unread update(s).</p></a>
+	</div>
+	<h2 class="section-label">Quick actions</h2>
+	<div class="quick-actions">
+		<a class="button" href="{{ url_for('find_donor') }}">⌕ Find Donor</a>
+		<a class="button button-secondary" href="{{ url_for('quick_match') }}">⚡ Quick Match</a>
+		<a class="button" href="{{ url_for('request_blood') }}">＋ Request Blood</a>
+		<a class="button button-secondary" href="{{ url_for('my_requests') }}">▤ My Requests</a>
+		<a class="button button-secondary" href="{{ url_for('support_tickets') }}">✉ Support</a>
+		<a class="button button-secondary" href="{{ url_for('donor_map') }}">⌖ Donor Map</a>
+		<a class="button button-secondary" href="{{ url_for('notifications') }}">◌ Notifications</a>
+	</div>
+	<form class="availability-control" method="post" action="{{ url_for('update_own_availability') }}">
+		<span><strong>Your donor availability</strong><small>Only your own status can be changed here.</small></span>
+		<select name="available" aria-label="Your availability"><option value="1" {% if user['available'] %}selected{% endif %}>Available</option><option value="0" {% if not user['available'] %}selected{% endif %}>Not Available</option></select>
+		<button class="button button-small" type="submit">Update</button>
+	</form>
+</section>
+{% endblock %}

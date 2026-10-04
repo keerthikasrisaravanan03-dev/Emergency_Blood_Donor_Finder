@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block title %}Emergency request | Emergency Blood Finder{% endblock %}{% block content %}
+<section class="page-wrap narrow"><p class="eyebrow">Response request</p><h1>Request blood support</h1><p class="muted">Priority is an application-level coordination aid, not a medical compatibility decision.</p>
+<form class="panel form-grid" method="post">
+	<label>Blood group<select name="blood_group" required><option value="">Select group</option>{% for group in blood_groups %}<option value="{{ group }}" {% if form_data and form_data.blood_group == group %}selected{% endif %}>{{ group }}</option>{% endfor %}</select></label>
+	<label>City<input name="city" value="{{ form_data.city if form_data else '' }}" maxlength="100" required></label>
+	<label>Units required<input type="number" name="units" min="1" max="100" value="{{ form_data.units if form_data else '' }}" required></label>
+	<label>Priority level<select name="emergency" required>{% for level in emergency_levels %}<option value="{{ level }}" {% if form_data and form_data.emergency == level %}selected{% endif %}>{{ level }}</option>{% endfor %}</select></label>
+	<label>Required date/time<input type="datetime-local" name="required_at" value="{{ form_data.required_at if form_data else '' }}" required></label>
+	<label>Expiry date/time<input type="datetime-local" name="expiry_at" value="{{ form_data.expiry_at if form_data else '' }}" required></label>
+	<button class="button" type="submit">Create request</button>
+</form></section>{% endblock %}

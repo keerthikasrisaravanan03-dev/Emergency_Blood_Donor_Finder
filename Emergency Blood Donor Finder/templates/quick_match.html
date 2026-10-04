@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Quick Match | Emergency Blood Finder{% endblock %}
+{% block content %}
+<section class="page-wrap">
+  <p class="eyebrow">Application-level matching</p><h1>Quick Match</h1>
+  <p class="muted">Matches available donors by the selected group and city. This does not determine medical compatibility.</p>
+  <form class="panel search-bar" method="post">
+    <label>Blood group<select name="blood_group" required><option value="">Select group</option>{% for group in blood_groups %}<option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>{{ group }}</option>{% endfor %}</select></label>
+    <label>City<input name="city" value="{{ selected_city }}" maxlength="100" placeholder="e.g. Salem" required></label>
+    <div class="filter-actions"><button class="button" type="submit">Find matches</button><a class="button button-secondary" href="{{ url_for('quick_match') }}">Clear</a></div>
+  </form>
+  {% if has_searched %}<h2 class="results-heading">{{ donors|length }} available match{{ '' if donors|length == 1 else 'es' }}</h2>
+  <div class="donor-grid">{% for donor in donors %}<article class="panel donor-card"><div class="donor-avatar">{{ donor['name'][0]|upper }}</div><div><h2>{{ donor['name'] }}</h2><span class="blood-badge">{{ donor['blood_group'] }}</span><p class="muted">{{ donor['city'] }} · Available</p><a class="text-link" href="{{ url_for('donor_map', blood_group=donor['blood_group'], city=donor['city']) }}">⌖ View on Map</a></div></article>{% else %}<div class="panel empty"><h2>No available matches</h2><p class="muted">Try another city or blood group.</p></div>{% endfor %}</div>{% endif %}
+</section>
+{% endblock %}

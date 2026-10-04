@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Admin notifications | Emergency Blood Finder{% endblock %}
+{% block content %}
+<section class="page-wrap narrow">
+  <p class="eyebrow">Administrator tools</p><h1>Important message</h1>
+  <p class="muted">Send an account notification to every registered user.</p>
+  <form class="panel form-grid" method="post">
+    <label>Message<textarea name="message" rows="5" maxlength="500" required></textarea></label>
+    <button class="button" type="submit">Send to all users</button>
+  </form>
+</section>
+{% endblock %}

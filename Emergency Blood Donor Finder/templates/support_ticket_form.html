@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% block title %}New support ticket | Emergency Blood Finder{% endblock %}{% block content %}
+<section class="page-wrap narrow">
+  <p class="eyebrow">Contact the administrator</p>
+  <h1>Submit a support ticket</h1>
+  <form class="panel form-grid" method="post">
+    <label>Subject<input name="subject" maxlength="140" value="{{ form_data.subject if form_data else '' }}" required></label>
+    <label>Category<select name="category" required>
+      <option value="">Select a category</option>
+      {% for option in categories %}
+        <option value="{{ option }}" {% if form_data and form_data.category == option %}selected{% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select></label>
+    <label>Priority<select name="priority" required>
+      {% for level in emergency_levels %}
+        <option value="{{ level }}" {% if form_data and form_data.priority == level %}selected{% endif %}>{{ level }}</option>
+      {% endfor %}
+    </select></label>
+    <label>Linked blood request<select name="request_id">
+      <option value="">No linked request</option>
+      {% for request in requests %}
+        <option value="{{ request['id'] }}" {% if form_data and form_data.request_id == request['id'] %}selected{% endif %}>#{{ request['id'] }} · {{ request['blood_group'] }} · {{ request['city'] }}</option>
+      {% endfor %}
+    </select></label>
+    <label class="full-width">Message<textarea name="message" rows="7" required>{{ form_data.message if form_data else '' }}</textarea></label>
+    <button class="button" type="submit">Send message</button>
+  </form>
+</section>
+{% endblock %}

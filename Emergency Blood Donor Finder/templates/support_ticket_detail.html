@@ -1,0 +1,50 @@
+{% extends 'base.html' %}{% block title %}Support ticket #{{ ticket['id'] }} | Emergency Blood Finder{% endblock %}{% block content %}
+<section class="page-wrap narrow">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Ticket #{{ ticket['id'] }}</p>
+      <h1>{{ ticket['subject'] }}</h1>
+    </div>
+    <a class="button button-secondary" href="{{ url_for('support_tickets') }}">Back to tickets</a>
+  </div>
+
+  <div class="panel">
+    <div class="request-summary">
+      <div>
+        <p class="muted">{{ ticket['category'] }} · {{ ticket['created_at'] }}</p>
+      </div>
+      <div>
+        <span class="badge {{ ticket['priority']|lower }}">{{ ticket['priority'] }}</span>
+        <p class="muted">{{ ticket['status'] }}</p>
+      </div>
+    </div>
+    {% if ticket['request_id'] %}
+      <p class="muted">Linked request: <strong>#{{ ticket['request_id'] }}</strong> · {{ ticket['blood_group'] }} · {{ ticket['request_city'] }} · {{ ticket['request_emergency'] }}</p>
+    {% endif %}
+    <div class="panel" style="margin-top: 18px; background: #fdf5f4;">
+      <strong>Initial message</strong>
+      <p>{{ ticket['message'] }}</p>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top: 22px;">
+    <h2>Conversation</h2>
+    {% for message in messages %}
+      <div style="border-top: 1px solid #f0e5e4; padding: 14px 0;">
+        <div class="request-summary">
+          <strong>{% if message['sender_role'] == 'user' %}You{% else %}Administrator{% endif %}</strong>
+          <small class="muted">{{ message['created_at'] }}</small>
+        </div>
+        <p>{{ message['message'] }}</p>
+      </div>
+    {% else %}
+      <p class="muted">No replies yet.</p>
+    {% endfor %}
+  </div>
+
+  <form class="panel" method="post" style="margin-top: 22px;">
+    <label>Reply<textarea name="message" rows="5" required></textarea></label>
+    <button class="button" type="submit">Send reply</button>
+  </form>
+</section>
+{% endblock %}

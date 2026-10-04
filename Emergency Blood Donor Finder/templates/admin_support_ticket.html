@@ -1,0 +1,60 @@
+{% extends 'base.html' %}{% block title %}Ticket #{{ ticket['id'] }} | Emergency Blood Finder{% endblock %}{% block content %}
+<section class="page-wrap narrow">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Ticket #{{ ticket['id'] }}</p>
+      <h1>{{ ticket['subject'] }}</h1>
+    </div>
+    <a class="button button-secondary" href="{{ url_for('admin_support') }}">Back to inbox</a>
+  </div>
+
+  <div class="panel">
+    <div class="request-summary">
+      <div>
+        <p><strong>{{ ticket['user_name'] }}</strong> · {{ ticket['user_email'] }}</p>
+        <p class="muted">{{ ticket['category'] }} · {{ ticket['created_at'] }}</p>
+      </div>
+      <div>
+        <span class="badge {{ ticket['priority']|lower }}">{{ ticket['priority'] }}</span>
+        <p class="muted">{{ ticket['status'] }}</p>
+      </div>
+    </div>
+    {% if ticket['request_id'] %}
+      <p class="muted">Linked blood request: #{{ ticket['request_id'] }} · {{ ticket['blood_group'] }} · {{ ticket['request_city'] }} · {{ ticket['request_emergency'] }}</p>
+    {% endif %}
+    <div class="panel" style="margin-top: 18px; background: #fdf5f4;">
+      <strong>Latest user message</strong>
+      <p>{{ ticket['message'] }}</p>
+    </div>
+  </div>
+
+  <form class="panel" method="post" action="{{ url_for('update_support_ticket_status', ticket_id=ticket['id']) }}" style="margin-top: 22px;">
+    <label>Status<select name="status">
+      {% for status in ['Open','In Progress','Waiting for user','Waiting for admin','Resolved','Closed'] %}
+        <option value="{{ status }}" {% if ticket['status'] == status %}selected{% endif %}>{{ status }}</option>
+      {% endfor %}
+    </select></label>
+    <button class="button button-small" type="submit">Update status</button>
+  </form>
+
+  <div class="panel" style="margin-top: 22px;">
+    <h2>Conversation</h2>
+    {% for message in messages %}
+      <div style="border-top: 1px solid #f0e5e4; padding: 14px 0;">
+        <div class="request-summary">
+          <strong>{% if message['sender_role'] == 'user' %}User{% else %}Administrator{% endif %}</strong>
+          <small class="muted">{{ message['created_at'] }}</small>
+        </div>
+        <p>{{ message['message'] }}</p>
+      </div>
+    {% else %}
+      <p class="muted">No replies yet.</p>
+    {% endfor %}
+  </div>
+
+  <form class="panel" method="post" style="margin-top: 22px;">
+    <label>Administrator reply<textarea name="message" rows="5" required></textarea></label>
+    <button class="button" type="submit">Send reply</button>
+  </form>
+</section>
+{% endblock %}

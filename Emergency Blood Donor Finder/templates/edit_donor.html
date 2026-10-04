@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% block title %}Edit donor | Emergency Blood Finder{% endblock %}{% block content %}
+<section class="page-wrap narrow">
+  <p class="eyebrow">Administrator tools</p>
+  <h1>Edit donor</h1>
+  <form id="update" class="panel form-grid" method="post">
+    <label>Email<input type="text" value="{{ donor['email'] }}" readonly></label>
+    <label>Name<input name="name" value="{{ donor['name'] }}" maxlength="100" required></label>
+    <label>Blood group<select name="blood_group">{% for group in blood_groups %}<option value="{{ group }}" {% if donor['blood_group']==group %}selected{% endif %}>{{ group }}</option>{% endfor %}</select></label>
+    <label>City<input name="city" value="{{ donor['city'] }}" maxlength="100" required></label>
+    <label>Phone<input name="phone" value="{{ donor['phone'] }}" required></label>
+    <label>Latitude<input name="latitude" type="number" step="any" value="{{ donor['latitude'] if donor['latitude'] is not none else '' }}" placeholder="Optional"></label>
+    <label>Longitude<input name="longitude" type="number" step="any" value="{{ donor['longitude'] if donor['longitude'] is not none else '' }}" placeholder="Optional"></label>
+    <label>Availability<select name="available"><option value="1" {% if donor['available'] %}selected{% endif %}>Available</option><option value="0" {% if not donor['available'] %}selected{% endif %}>Not available</option></select></label>
+    <p class="muted">Map markers use city-center coordinates by default when latitude and longitude are left blank.</p>
+    <button class="button" type="submit">Update donor</button>
+  </form>
+</section>
+{% endblock %}
